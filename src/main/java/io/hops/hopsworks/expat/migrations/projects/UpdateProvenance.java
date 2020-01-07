@@ -158,8 +158,6 @@ public class UpdateProvenance implements MigrateStep {
     }
   }
   
-  
-  
   private void traverseElements(Function<Long, ProjectAction> actions)
     throws SQLException, ConfigurationException, CheckedException {
     setup();
