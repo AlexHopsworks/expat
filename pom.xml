@@ -102,7 +102,7 @@
         <dependency>
             <groupId>io.hops</groupId>
             <artifactId>hadoop-client</artifactId>
-            <version>2.8.2.9-SNAPSHOT</version>
+            <version>2.8.2.10-EE-RC1</version>
             <exclusions>
                 <exclusion>
                     <groupId>com.sun.jersey</groupId>
@@ -303,6 +303,17 @@
             <releases>
                 <enabled>true</enabled>
             </releases>
+        </repository>
+        <repository>
+            <id>HopsEE</id>
+            <name>Hops Enterprise Repository</name>
+            <url>https://nexus.hops.works/repository/hops-artifacts</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
         </repository>
     </repositories>
 </project>

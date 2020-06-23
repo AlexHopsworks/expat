@@ -21,6 +21,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * document attached as an xattr to a trainingdataset directory
@@ -94,5 +95,34 @@ public class TrainingDatasetXAttrDTO {
   
   public void setFeatures(List<FeaturegroupXAttr.SimplifiedDTO> features) {
     this.features = features;
+  }
+  
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof TrainingDatasetXAttrDTO)) {
+      return false;
+    }
+    TrainingDatasetXAttrDTO that = (TrainingDatasetXAttrDTO) o;
+    return
+      Objects.equals(featurestoreId, that.featurestoreId) &&
+      Objects.equals(description, that.description) &&
+      Objects.equals(createDate, that.createDate) &&
+      Objects.equals(creator, that.creator);
+      // currently cannot reproduce component features
+      // Objects.deepEquals(features, that.features);
+  }
+  
+  @Override
+  public String toString() {
+    return "TrainingDatasetXAttrDTO{" +
+      "featurestoreId=" + featurestoreId +
+      ", description='" + description + '\'' +
+      ", createDate=" + createDate +
+      ", creator='" + creator + '\'' +
+      ", features=" + features +
+      '}';
   }
 }

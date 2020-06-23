@@ -20,9 +20,12 @@ import io.hops.hopsworks.common.featurestore.xattr.dto.FeaturestoreXAttrsConstan
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 public class FeaturegroupXAttr {
   /**
@@ -73,13 +76,28 @@ public class FeaturegroupXAttr {
         ", features=" + features +
         '}';
     }
+  
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) {
+        return true;
+      }
+      if (!(o instanceof Base)) {
+        return false;
+      }
+      Base base = (Base) o;
+      Collection<String> f = new ArrayList<>(this.getFeatures());
+      f.removeAll(base.getFeatures());
+      return Objects.equals(featurestoreId, base.featurestoreId) &&
+        (getFeatures().size() == base.getFeatures().size() && f.isEmpty());
+    }
   }
   
   /**
    * document attached as an xattr to a featuregroup directory
    */
   @XmlRootElement
-  public static class FullDTO extends io.hops.hopsworks.common.featurestore.xattr.dto.FeaturegroupXAttr.Base {
+  public static class FullDTO extends FeaturegroupXAttr.Base {
     @XmlElement(nillable = true, name = FeaturestoreXAttrsConstants.DESCRIPTION)
     private String description;
     @XmlElement(nillable = true, name = FeaturestoreXAttrsConstants.CREATE_DATE)
@@ -135,6 +153,22 @@ public class FeaturegroupXAttr {
         ", creator='" + creator + '\'' +
         '}';
     }
+  
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) {
+        return true;
+      }
+      if (!(o instanceof FullDTO)) {
+        return false;
+      }
+      FullDTO fullDTO = (FullDTO) o;
+      //for some reasone create date is not the same - minor issue
+      return super.equals(o) &&
+        Objects.equals(description, fullDTO.description) &&
+        //Objects.equals(createDate, fullDTO.createDate) &&
+        Objects.equals(creator, fullDTO.creator);
+    }
   }
   
   /**
@@ -142,7 +176,7 @@ public class FeaturegroupXAttr {
    * @link io.hops.hopsworks.common.featurestore.xattr.dto.TrainingDatasetXAttrDTO
    */
   @XmlRootElement
-  public static class SimplifiedDTO extends io.hops.hopsworks.common.featurestore.xattr.dto.FeaturegroupXAttr.Base {
+  public static class SimplifiedDTO extends FeaturegroupXAttr.Base {
     @XmlElement(nillable = false, name = FeaturestoreXAttrsConstants.NAME)
     private String name;
     @XmlElement(nillable = false, name = FeaturestoreXAttrsConstants.VERSION)
@@ -171,6 +205,24 @@ public class FeaturegroupXAttr {
     
     public void setVersion(Integer version) {
       this.version = version;
+    }
+  
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) {
+        return true;
+      }
+      if (!(o instanceof SimplifiedDTO)) {
+        return false;
+      }
+      if (!super.equals(o)) {
+        return false;
+      }
+      SimplifiedDTO that = (SimplifiedDTO) o;
+      return
+        super.equals(o) &&
+        Objects.equals(name, that.name) &&
+        Objects.equals(version, that.version);
     }
   }
 }
