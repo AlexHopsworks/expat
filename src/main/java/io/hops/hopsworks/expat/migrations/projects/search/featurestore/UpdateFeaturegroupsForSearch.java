@@ -223,7 +223,7 @@ public class UpdateFeaturegroupsForSearch implements MigrateStep {
         xattr = new FeaturegroupXAttr.FullDTO(featurestoreId, description, createDate, creator);
       }
     
-      byte[] existingVal = dfso.getXAttr(featuregroupPath, "provenance.featurestore");
+      byte[] existingVal = HopsClient.getXAttr(dfso, featuregroupPath, "provenance.featurestore");
       if(existingVal == null) {
         LOGGER.info("featuregroup:{} rollbacked (no value)", featuregroupPath);
       } else {

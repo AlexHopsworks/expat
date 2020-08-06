@@ -196,7 +196,7 @@ public class UpdateTrainingdatasetsForSearch implements MigrateStep {
         LOGGER.warn("xattr too large - skipping attaching features to trainingdataset");
         xattr = new TrainingDatasetXAttrDTO(featurestoreId, description, createDate, creator);
       }
-      byte[] existingVal = dfso.getXAttr(trainingdatasetPath, "provenance.featurestore");
+      byte[] existingVal = HopsClient.getXAttr(dfso, trainingdatasetPath, "provenance.featurestore");
       if(existingVal == null) {
         LOGGER.info("featuregroup:{} rollbacked (no value)", trainingdatasetPath);
       } else {

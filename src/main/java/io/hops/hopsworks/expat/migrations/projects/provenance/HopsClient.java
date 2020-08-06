@@ -21,6 +21,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.CommonConfigurationKeys;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.fs.XAttrSetFlag;
+import org.apache.hadoop.ipc.RemoteException;
 import org.apache.hadoop.security.UserGroupInformation;
 import java.io.File;
 import java.io.IOException;
@@ -73,6 +74,20 @@ public class HopsClient {
   public static void removeXAttr(DistributedFileSystemOps dfso, String path, String name) throws IOException {
     if(dfso.getXAttr(path, name) != null) {
       dfso.removeXAttr(path, name);
+    }
+  }
+  
+  public static byte[] getXAttr(DistributedFileSystemOps dfso, String path, String name) throws IOException {
+    try {
+      return dfso.getXAttr(path,name);
+    } catch (RemoteException e) {
+      if(e.getClassName().equals("java.io.IOException")
+        && e.getMessage().startsWith("At least one of the attributes provided was not found.")) {
+        return null;
+      }
+      throw e;
+    } catch (IOException e) {
+      throw e;
     }
   }
 }
